@@ -40,6 +40,9 @@ const styles = StyleSheet.create({
         width: 175,
         marginTop: '5%',
     },
+    warn:{
+        fontWeight: 25,
+    },
 })
 
 export default styles;

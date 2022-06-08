@@ -1,36 +1,62 @@
 import { Text, View, TouchableOpacity, Image } from 'react-native';
-import styles from './styles'
+import styles from './styles';
 import { RadioButton } from 'react-native-paper';
-import { useState } from 'react'
-import Header from '../../componente/header'
+import { useState } from 'react';
+import Header from '../../componente/header';
+import ListaCandidate from './listCandidate';
+import * as React from 'react';
 
 
 export default function Votar({ navigation }){
-    const [cand1, setCand1] = useState(0)
-    const [cand2, setCand2] = useState(0)
+
+    const [warning, setWarning] = useState('');
+    const [checked, setChecked] = React.useState();
 
 
 
-    function getVotes(){
-        console.log(cand1, cand2)
+    function getVotes(x){
+        if(x === 'first'){
+            ListaCandidate[0]['votes'] = ListaCandidate[0]['votes']+1
+            console.log(ListaCandidate[0]['votes'])
+            navigation.navigate('Resultado')
+        }
+        else if(x === 'second'){
+            ListaCandidate[1]['votes'] = ListaCandidate[1]['votes']+1
+            console.log(ListaCandidate[1]['votes'])
+            navigation.navigate('Resultado')
+        }
+        else{
+            setWarning('Favor selecionar um candidato')
+        }
     }
 
 
     return(
         <View>
             <Header />
+            <Text style={styles.txt}>{warning}</Text>
             <View style={styles.presidentContent}>
                 <View>
-                    <TouchableOpacity onPress={() => setCand1(cand1+1)}><Image source={require('../../assets/king.jpg')} style={styles.img}/></TouchableOpacity>
+                    <Image source={require('../../assets/king.jpg')} style={styles.img}/>
                     <Text style={styles.txtImg}>Imperador Reynald II</Text>
+                    <RadioButton
+                        value="first"
+                        status={ checked === 'first' ? 'checked' : 'unchecked' }
+                        onPress={() => setChecked('first')}
+                    />
                 </View>
                 <View>
-                    <TouchableOpacity onPress={() => setCand2(cand2+1)}><Image source={require('../../assets/king.jpg')} style={styles.img}/></TouchableOpacity>
+                    <Image source={require('../../assets/king.jpg')} style={styles.img}/>
                     <Text style={styles.txtImg}>King Reynald IV</Text>
+                    <RadioButton
+                        value="second"
+                        status={ checked === 'second' ? 'checked' : 'unchecked' }
+                        onPress={() => setChecked('second')}
+                    />
                 </View>
             </View>
             <View style={styles.btnContainer}>
-                <TouchableOpacity onPress={getVotes} style={styles.btn}><Text style={styles.btnTxt}>Teste</Text></TouchableOpacity>
+                <TouchableOpacity onPress={() => getVotes(checked)} style={styles.btn}><Text style={styles.btnTxt}>Votar</Text></TouchableOpacity>
                 <TouchableOpacity onPress={() => navigation.navigate('Home')} style={styles.btn}><Text style={styles.btnTxt}>Home</Text></TouchableOpacity>
             </View>
         </View>
